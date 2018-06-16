@@ -1,4 +1,4 @@
-Starter code for Connect to Firebase section of the firebase workshop by Kunz Leigh & Associates!
+Starter code for the Firestore section of the firebase workshop by Kunz Leigh & Associates!
 
 ## Working title: BrewerBase
 
