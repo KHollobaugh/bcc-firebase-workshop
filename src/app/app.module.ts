@@ -11,13 +11,11 @@ import { BreweryComponent } from './brewery/brewery.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReviewComponent } from './review/review.component';
-import * as firebase from 'firebase/app';
 import { environment } from '../environments/environment';
 
 /*
  * Firebase initialization and configuration happens here
  */
-firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [
