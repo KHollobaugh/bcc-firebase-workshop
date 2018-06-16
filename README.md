@@ -1,9 +1,9 @@
-Finished code for the firebase workshop by Kunz Leigh & Associates!
+Starter code for Cloud Functions section of the firebase workshop by Kunz Leigh & Associates!
 
 ## Working title: BrewerBase
 
 Stackblitz link
-https://stackblitz.com/github/kunzleigh/bcc-firebase-workshop
+https://stackblitz.com/github/kunzleigh/bcc-firebase-workshop/tree/connect-to-firebase
 Please note the app will not work fully unless you connect it to your own firebase project
 Adding your firebase web config keys to src/config/firebase.config.ts to see it in action :)
 

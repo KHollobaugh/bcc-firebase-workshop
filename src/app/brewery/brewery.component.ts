@@ -91,9 +91,7 @@ export class BreweryComponent implements OnInit {
    * @param breweryId
    */
   postView(breweryId) {
-    this.http.post('https://us-central1-kla-firebase-workshop.cloudfunctions.net/httpTriggers/brewery-viewed', {
-      breweryId: breweryId
-    }).subscribe((data: any) => {
+    this.http.post('', {}).subscribe((data: any) => {
       console.log(`You are viewer number ${data.views}`);
     });
   }
