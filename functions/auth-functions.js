@@ -8,28 +8,7 @@ const admin = require('firebase-admin');
   * https://firebase.google.com/docs/reference/js/firebase.User
   */
 module.exports.newUser = function(user, context) {
-    console.log(user);
-    // Create a user in Firestore so we can associate data with them
-    const newUser = {
-        email: user.email,
-        uid: user.uid,
-        displayName: user.displayName,
-        createdOn: user.metadata.creationTime,
-        profileImageUrl: defaultImagePath,
-        admin: false,
-        locked: false
-    };
-    console.log('Time to welcome our new user!');
-    console.log(newUser);
 
-    // Save the user and send a welcome email. Or log out the error
-    return admin.firestore().collection('/users/').doc(user.uid).set(newUser).then(() => {
-        console.log('Successfully saved user to firestore');
-        return sendWelcomeEmail(user.email);
-    }).catch(e => {
-        console.log(e);
-        console.log('There was an error sending welcome email to ' + user.email);
-    });
 }
 
 /**
@@ -39,15 +18,9 @@ module.exports.newUser = function(user, context) {
  * one (free) option for sending emails using node that we chose to use
  */
 function sendWelcomeEmail(email) {
-    console.log('sending welcome email');
-    const firebaseConfig = functions.config();
-    console.log(firebaseConfig);
-    // These are set locally using the firebase cli tools
-    // firebase functions:config:set gmail.email=firebase.workshop.tester@gmail.com
-    // firebase functions:config:set gmail.password=password
-    // Once they are set, deploying functions (see above) will set the config values on the functions server
-    const gmailEmail = firebaseConfig.gmail.email;
-    const gmailPassword = firebaseConfig.gmail.password;
+    /**
+     * Get gmail email and password from firebase functions config
+     */
 
     const mailOptions = {
       from: gmailEmail,

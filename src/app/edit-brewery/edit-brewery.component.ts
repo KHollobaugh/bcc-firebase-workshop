@@ -30,10 +30,6 @@ export class EditBreweryComponent implements OnInit {
       /**
        * Get brewery document reference from Firestore
        */
-      this.breweryRef = this.db.collection('breweries').doc(breweryId);
-      this.breweryRef.get().then((doc) => {
-        this.brewery = { ...doc.data(), id: doc.id }
-      });
     });
   }
 
@@ -41,13 +37,7 @@ export class EditBreweryComponent implements OnInit {
    * Update the brewery document
    */
   saveBrewery() {
-    this.breweryRef
-      .update(this.brewery)
-      .then(() => {
-        alert('Saved successfully!');
-      }).catch(e => {
-        alert('There was an error saving the brewery ' + e);
-      });
+
   }
 
   // Ignore me this bit is to make some materialize styling work with angular template binding :)
