@@ -3,7 +3,7 @@ Finished code for the firebase workshop by Kunz Leigh & Associates!
 ## Working title: BrewerBase
 
 Stackblitz link
-https://stackblitz.com/github/okeefem3/firebase-workshop-web
+https://stackblitz.com/github/kunzleigh/bcc-firebase-workshop
 Please note the app will not work fully unless you connect it to your own firebase project
 Adding your firebase web config keys to src/config/firebase.config.ts to see it in action :)
 
@@ -72,7 +72,7 @@ Steps:
     3. Enable Email/Password, Google and Anonymous
 * In src/app/auth/auth.component.ts file 
   * Implement sign up/in code for the three methods you enabled
-  * Implement code to convert an anonymous user to Email/Password
+  * Implement code to link a user to Email/Password or Google
   * Implement code to get the current user from Firebase auth, and to sign out
 * In src/app/app.component.ts
   * Implement code to set the auth language and listen to auth state changes
@@ -228,4 +228,4 @@ Steps:
 * BONUS In functions/storage.functions.js
     * If you want to continue with this portion, you will need to upgrade your firebase project to the blaze plan (pay as you) you will have free usage up to the limits and will be charged (very small amounts) after that. Do not worry though, for this workshop we will not be doing enough to warrant being charged and you can downgrade at any time
     * Implement a function that fires when a storage object has been finalized that uses the cloud vision api to detect whether or not the image has adult or violent content. If the image does, use ImageMagick to blur it, re upload it, and lock the user that uploaded the image
-    * Implement Storage and Firestore rules that do not allow locked users to manipulate any data
+    * Implement Firestore rules that do not allow locked users to manipulate any data
