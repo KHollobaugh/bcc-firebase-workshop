@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     firebase.auth().onAuthStateChanged(user => {
       this.isAuthenticated = user != null;
-      this.displayName = user.displayName;
+      this.displayName = this.isAuthenticated ? user.displayName : '';
     });
   }
 

@@ -43,11 +43,11 @@ export class BreweryComponent implements OnInit {
        * Get brewery reviews collection reference from Firestore and listen to changes
        */
       this.reviewsRef = this.breweryRef.collection('reviews');
-      this.reviewsRef.onSnapshot((snapShot) => {
+      this.reviewsRef.onSnapshot(snapShot => {
         this.reviews = snapShot.docs.map((d) => {
           const data = d.data();
           const id = d.id;
-          return { ...data, id: id }
+          return { ...data, id: id };
         });
       });
     });
@@ -57,10 +57,12 @@ export class BreweryComponent implements OnInit {
    * Add a review to the reviews collection and a corresponding review mapping
    */
   addReview() {
-    this.reviewsRef.add().then((review) => {
+    this.reviewsRef.add(
+      this.createNewReview()
+    ).then(review => {
       this.db.collection('reviewMapping').doc(`${this.brewery.id}_${this.getCurrentUid()}`).set({ reviewId: review.id });
-    }).catch((e) => {
-      alert('You already added a review for this brewery!')
+    }).catch(e => {
+      alert('There was an error adding a review for this brewery ' + e);
     });
   }
 
@@ -70,19 +72,23 @@ export class BreweryComponent implements OnInit {
    */
   saveReview(review) {
     this.breweryRef.collection('reviews').doc(review.id)
-      .update({ ...review, breweryId: this.brewery.id });
+      .update({ ...review, breweryId: this.brewery.id }).catch(e => {
+        alert('There was an error saving the review ' + e);
+      });
   }
 
   /**
    * Delete the given review id from the reviews collection
    */
   deleteReview(id) {
-    this.breweryRef.collection('reviews').doc(id).delete();
+    this.breweryRef.collection('reviews').doc(id).delete().catch(e => {
+      alert('There was an error saving the review ' + e);
+    });
   }
 
   /**
    * Make an HTTP Post request to the functions backend to update the number of views on the given brewery
-   * @param breweryId 
+   * @param breweryId
    */
   postView(breweryId) {
     this.http.post('https://us-central1-kla-firebase-workshop.cloudfunctions.net/httpTriggers/brewery-viewed', {
@@ -107,6 +113,6 @@ export class BreweryComponent implements OnInit {
       uid: this.getCurrentUid(),
       createdOn: firebase.firestore.FieldValue.serverTimestamp(),
       rating: 0
-    }
+    };
   }
 }

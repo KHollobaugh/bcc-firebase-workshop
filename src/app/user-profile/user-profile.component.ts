@@ -44,13 +44,11 @@ export class UserProfileComponent implements OnInit {
        * HINT almost exactly the same as on the brewery component, just a differenct base collection
        */
       this.reviewsRef = this.userRef.collection('reviews');
-      this.reviewsRef.onSnapshot({
-        includeQueryMetadataChanges: true
-      }, (snapShot) => {
+      this.reviewsRef.onSnapshot( (snapShot) => {
         this.reviews = snapShot.docs.map((d) => {
           const data = d.data();
           const id = d.id;
-          return { ...data, id: id }
+          return { ...data, id: id };
         });
       });
   }
@@ -69,7 +67,7 @@ export class UserProfileComponent implements OnInit {
       this.uploadTask.on('state_changed', (snapshot) => {
         // Observe state change events such as progress, pause, and resume
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         switch (snapshot.state) {
           case firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -80,7 +78,7 @@ export class UserProfileComponent implements OnInit {
             break;
         }
       }, (error) => {
-        alert('An error with the upload occurred! Please try again.')
+        alert('An error with the upload occurred! Please try again.');
       }, () => {
         // Handle successful uploads on complete
         this.user.profileImagePath = this.filePath;
@@ -96,7 +94,7 @@ export class UserProfileComponent implements OnInit {
    * Extract the file when one is selected
    */
   onFileSelected(event) {
-    let files = event.srcElement.files;
+    const files = event.srcElement.files;
     this.profileImageFile = files[0];
     this.filePath = this.profileImageFile.name;
   }

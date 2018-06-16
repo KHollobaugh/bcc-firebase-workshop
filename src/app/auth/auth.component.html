@@ -20,7 +20,7 @@
         <div *ngIf="getCurrentUser() == null">
           <div class="row">
             <div class="col m12 xl6">
-              <a class="waves-effect waves-light btn" (click)="exampleClickFunction()">Example Button</a>
+              <a class="waves-effect waves-light btn" (click)="createUserWithEmailAndPassword()">Sign Up With Email</a>
             </div>
             <div class="col m12 xl6">
               <a class="waves-effect waves-light btn" (click)="signInAnonymously()">Continue As Guest</a>
@@ -28,30 +28,14 @@
           </div>
           <div class="row">
             <div class="col m12 xl6">
-              <a class="waves-effect waves-light btn" (click)="createUserWithEmailAndPassword()">Sign Up With Email</a>
+                <a class="waves-effect waves-light btn" (click)="signInWithEmailAndPassword()">Sign In With Email</a>
             </div>
-            <div class="col m12 xl6">
-              <a class="waves-effect waves-light btn" (click)="signInWithEmailAndPassword()">Sign In With Email</a>
-            </div>
-          </div>
-          <div class="row">
             <div class="col m12 xl6">
               <a class="waves-effect waves-light btn" (click)="signInWithGoogle()">Sign In With Google</a>
-            </div>
-            <div class="col m12 xl6">
-              <a class="waves-effect waves-light btn" (click)="signInWithFacebook()">Sign In With Facebook</a>
             </div>
           </div>
         </div>
         <div *ngIf="getCurrentUser() != null">
-          <div class="row" *ngIf="getCurrentUser().isAnonymous">
-            <div class="col l12 xl6">
-              <a class="waves-effect waves-light btn" (click)="convertAnonymousToGoogle()">Convert to Google</a>
-            </div>
-            <div class="col l12 xl6">
-              <a class="waves-effect waves-light btn" (click)="convertAnonymousToEmailAndPassword()">Convert to Email and Password</a>
-            </div>
-          </div>
           <div class="row">
             <div class="col l12 xl6">
               <a class="waves-effect waves-light btn" (click)="linkAccountToGoogle()">Link to Google</a>

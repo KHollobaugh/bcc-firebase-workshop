@@ -38,13 +38,15 @@ export class EditBreweryComponent implements OnInit {
   }
 
   /**
-   * Update the brewery document 
+   * Update the brewery document
    */
   saveBrewery() {
     this.breweryRef
       .update(this.brewery)
       .then(() => {
         alert('Saved successfully!');
+      }).catch(e => {
+        alert('There was an error saving the brewery ' + e);
       });
   }
 

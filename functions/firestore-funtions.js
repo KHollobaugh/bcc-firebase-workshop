@@ -5,8 +5,8 @@ const admin = require('firebase-admin');
  * Takes in a firestore change and context for a brewery review
  * and updates the corresponding review on the owning users review collection
  * and updates the average rating on the brewery the review belongs to if needed
- * @param {*} change 
- * @param {*} context 
+ * @param {*} change
+ * @param {*} context
  */
 module.exports.updateBreweryReview = function(change, context) {
     console.log(change);
@@ -22,10 +22,10 @@ module.exports.updateBreweryReview = function(change, context) {
 
 /**
  * Takes in a firestore change and context for a user review
- * and updates the corresponding review on the owning brewery 
+ * and updates the corresponding review on the owning brewery
  * and updates the average rating on the brewery the review belongs to if needed
- * @param {*} change 
- * @param {*} context 
+ * @param {*} change
+ * @param {*} context
  */
 module.exports.updateUserReview = function(change, context) {
     console.log(change);
@@ -41,39 +41,61 @@ module.exports.updateUserReview = function(change, context) {
 
 /**
  * Deletes the corresponding review on the users collection and updates the average rating on the brewery
- * @param {*} snashot 
- * @param {*} context 
+ * @param {*} snashot
+ * @param {*} context
  */
-module.exports.deleteBreweryReview = function(snashot, context) {
+module.exports.deleteBreweryReview = function(snapshot, context) {
     const reviewId = context.params.reviewId;
-    const deletedReview = snashot.data();
-    const docRef = admin.firestore().collection('users').doc(deletedReview.uid);
-    docRef.collection('reviews').doc(reviewId).delete();
-    return aggregateRatings(deletedReview.breweryId);
+    const deletedReview = snapshot.data();
+    const userReviewDocRef = admin.firestore()
+                                  .collection('users')
+                                  .doc(deletedReview.uid)
+                                  .collection('reviews')
+                                  .doc(reviewId);
+    return userReviewDocRef.delete().then(() => {
+      console.log('Successfully delete user review');
+      return aggregateRatings(deletedReview.breweryId);
+    }).catch(e => {
+      console.log('Failed to delete user review', e);
+    });
 }
 
 /**
  * Deletes the corresponding review on the breweries collection
  * updates the average rating on the brewery
  * deleted the review mapping
- * @param {*} snashot 
- * @param {*} context 
+ * @param {*} snashot
+ * @param {*} context
  */
-module.exports.deleteUserReview = function(snashot, context) {
-    const reviewId = context.params.reviewId;
-    const deletedReview = snashot.data();
-    const docRef = admin.firestore().collection('breweries').doc(deletedReview.breweryId);
-    docRef.collection('reviews').doc(reviewId).delete();
-    // Delete the Brewery/User review mapping
-    admin.firestore().collection('reviewMapping').doc(`${deletedReview.breweryId}_${deletedReview.uid}`).delete();
+module.exports.deleteUserReview = function(snapshot, context) {
+  const reviewId = context.params.reviewId;
+  const deletedReview = snapshot.data();
+  // Create a batch for atomicity
+  const deleteBatch = admin.firestore().batch();
+  // Get the brewery review to be deleted alongside the user review
+  // Alternately can be written as
+  // const breweryReviewDocRef = admin.firestore().doc(`breweries/${deletedReview.breweryId}/reviews/${reviewId}`);
+  const breweryReviewDocRef = admin.firestore()
+                                   .collection('breweries')
+                                   .doc(deletedReview.breweryId)
+                                   .collection('reviews')
+                                   .doc(reviewId);
+  deleteBatch.delete(breweryReviewDocRef);
+  const reviewMappingDocRef = admin.firestore().collection('reviewMapping').doc(`${deletedReview.breweryId}_${deletedReview.uid}`);
+  deleteBatch.delete(reviewMappingDocRef);
+  return deleteBatch.commit().then(() => {
+    console.log('Successfully deleted brewery review and review mapping in batch');
     return aggregateRatings(deletedReview.breweryId);
+  }).catch(e => {
+    console.log('Failed to delete brewery review and review mapping in batch', e);
+  });
 }
 
 /**
  * Function to delete the old user profile image when a new one is upload
  * so we do not crowd the storage bucket!
- * @param {*} change 
- * @param {*} context 
+ * @param {*} change
+ * @param {*} context
  */
 module.exports.userProfileImageChange = function(change, context) {
     const userId = context.params.userId;
@@ -90,7 +112,7 @@ module.exports.userProfileImageChange = function(change, context) {
                            })
                           .catch(err => {
                             console.error('ERROR:', err);
-                          }); 
+                          });
     }
     return null;
 }
@@ -106,7 +128,6 @@ function aggregateRatings(breweryId) {
         const totalRating = querySnapshot.docs.map(doc => doc.data().rating)
                                                 .reduce((rating, total) => rating + total, 0);
                                                 console.log(totalRating);
-
         const averageRating = (totalRating / numberReviews).toFixed(2);
         console.log(averageRating);
 
@@ -120,10 +141,10 @@ function aggregateRatings(breweryId) {
  /**
   * Helper function to sync the given review between users and breweries if changes were made
   * and to update the average rating on the brewery if rating was changed
-  * @param {*} docRefToUpdate 
-  * @param {*} newValue 
-  * @param {*} previousValue 
-  * @param {*} reviewId 
+  * @param {*} docRefToUpdate
+  * @param {*} newValue
+  * @param {*} previousValue
+  * @param {*} reviewId
   */
  function updateReview(docRefToUpdate, newValue, previousValue, reviewId) {
     if (checkReviewChanged(newValue, previousValue)) {
@@ -137,11 +158,11 @@ function aggregateRatings(breweryId) {
 
  /**
   * Helper function to determine if there was a meaningful change between the given reviews
-  * @param {*} newValue 
-  * @param {*} previousValue 
+  * @param {*} newValue
+  * @param {*} previousValue
   */
  function checkReviewChanged(newValue, previousValue) {
-     return newValue.rating !== previousValue.rating || 
-            newValue.text !== previousValue.text || 
+     return newValue.rating !== previousValue.rating ||
+            newValue.text !== previousValue.text ||
             newValue.title !== previousValue.title;
  }

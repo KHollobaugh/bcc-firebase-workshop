@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -11,6 +12,8 @@ export class BreweryListComponent implements OnInit {
   breweryList;
   db;
 
+  constructor(private router: Router) { }
+
   ngOnInit() {
     // Get Firestore reference
     this.db = firebase.firestore();
@@ -20,7 +23,7 @@ export class BreweryListComponent implements OnInit {
       this.breweryList = snapShot.docs.map((d) => {
         const data = d.data();
         const id = d.id;
-        return { ...data, id: id }
+        return { ...data, id: id };
       });
     });
   }
@@ -31,7 +34,12 @@ export class BreweryListComponent implements OnInit {
   addBrewery() {
     this.db.collection('breweries').add(
       this.createNewBrewery()
-    );
+    ).then(newBrewery => {
+      alert('New brewery added!');
+      this.router.navigate(['/brewery', newBrewery.id]);
+    }).catch(e => {
+      alert('There was an error adding a new brewery ' + e);
+    });
   }
 
   /**
@@ -39,7 +47,9 @@ export class BreweryListComponent implements OnInit {
    * @param id
    */
   deleteBrewery(id) {
-    this.db.collection('breweries').doc(id).delete();
+    this.db.collection('breweries').doc(id).delete().catch(e => {
+      alert('There was an error deleting the brewery ' + e);
+    });
   }
 
   /**
@@ -58,6 +68,6 @@ export class BreweryListComponent implements OnInit {
       description: 'This is a new Brewery',
       createdOn: firebase.firestore.FieldValue.serverTimestamp(),
       uid: this.getCurrentUid()
-    }
+    };
   }
 }

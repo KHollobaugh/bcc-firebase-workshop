@@ -7,16 +7,8 @@ import * as firebase from 'firebase';
 })
 export class AuthComponent {
 
-  public email = "";
-  public password = "";
-  public exampleText = 'example function parameter';
-
-  /**
-   * Example click listener function to show how this is done in Angular
-   */
-  exampleClickFunction() {
-    alert(this.exampleText);
-  }
+  public email = '';
+  public password = '';
 
   /**
    * Create a Firebase auth user with a given email and password
@@ -26,7 +18,6 @@ export class AuthComponent {
       .auth()
       .createUserWithEmailAndPassword(this.email, this.password)
       .then((user) => {
-        debugger;
         console.log(user);
       })
       .catch((error) => {
@@ -103,24 +94,30 @@ export class AuthComponent {
     });
   }
 
-  /**
-   * Convert the anonymous user data to an email/password account
+   /**
+   * Link an existing Firebase user to a Google sign in
    */
-  convertAnonymousToEmailAndPassword() {
-    const credential = firebase.auth.EmailAuthProvider.credential(this.email, this.password);
-    this.linkAccountWithCredential(credential);
+  linkAccountToGoogle() {
+    const provider = this.createGoogleAuthProvider();
+    firebase.auth().currentUser.linkWithPopup(provider).then((result) => {
+      // Accounts successfully linked.
+      const credential = result.credential;
+      const user = result.user;
+      console.log('Account linking to Google success', user);
+    }).catch((error) => {
+      console.log('Account linking to Google error', error);
+    });
   }
 
   /**
-   * Generic helper function to link the current user with the given auth credentials
-   * Use to convert an anonymours user to a different auth type
-   * @param credential
+   * Link an existing Firebase user to an email/password sign in
    */
-  private linkAccountWithCredential(credential) {
+  linkAccountToEmailAndPassword() {
+    const credential = firebase.auth.EmailAuthProvider.credential(this.email, this.password);
     firebase.auth().currentUser.linkWithCredential(credential).then((user) => {
-      this.signInSuccessful(user);
+      console.log('Account linking to email/password success', user);
     }, (error) => {
-      console.log("Error upgrading anonymous account", error);
+      console.log('Account linking to email/password error', error);
     });
   }
 
@@ -162,40 +159,5 @@ export class AuthComponent {
       'display': 'popup'
     });
     this.signInWithPopup(provider);
-  }
-
-  /**
-   * Convert the anonymous user data to a google account
-   */
-  convertAnonymousToGoogle() {
-    const credential = firebase.auth.GoogleAuthProvider.credential();
-    this.linkAccountWithCredential(credential);
-  }
-
-  /**
-   * Link an existing Firebase non anonymous user to a Google sign in
-   */
-  linkAccountToGoogle() {
-    const provider = this.createGoogleAuthProvider();
-    firebase.auth().currentUser.linkWithPopup(provider).then(function(result) {
-      // Accounts successfully linked.
-      const credential = result.credential;
-      const user = result.user;
-      console.log("Account linking to Google success", user);
-    }).catch((error) => {
-      console.log("Account linking to Google error", error);
-    });
-  }
-
-  /**
-   * Link an existing Firebase non anonymous user to an email/password sign in
-   */
-  linkAccountToEmailAndPassword() {
-    const credential = firebase.auth.EmailAuthProvider.credential(this.email, this.password);
-    firebase.auth().currentUser.linkWithCredential(credential).then((user) => {
-      console.log("Account linking to email/password success", user);
-    }, (error) => {
-      console.log("Account linking to email/password error", error);
-    });
   }
 }
