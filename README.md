@@ -1,4 +1,4 @@
-Starter code for Cloud Functions section of the firebase workshop by Kunz Leigh & Associates!
+Starter code for the Cloud Functions section of the firebase workshop by Kunz Leigh & Associates!
 
 ## Working title: BrewerBase
 
