@@ -1,4 +1,4 @@
-Starter code for Storage section of the firebase workshop by Kunz Leigh & Associates!
+Starter code for the Storage section of the firebase workshop by Kunz Leigh & Associates!
 
 ## Working title: BrewerBase
 
