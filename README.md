@@ -1,5 +1,7 @@
 Starter code for Connect to Firebase section of the firebase workshop by Kunz Leigh & Associates!
 
+If you would like to follow along with the workshop code, please follow the instructions in the Development environment set up section below. Our code is built using the Angular framework to make it clean and easy to build/work with. Do not worry, you need not have ANY experience with Angular to follow along. All coding will be done using the vanilla Javascript SDK for the app, and plain old JS in a node environment for Cloud Functions. A presenter will be coding along during the given work times to help if you get stuck.
+
 ## Working title: BrewerBase
 
 Stackblitz link
@@ -18,7 +20,7 @@ Adding your firebase web config keys to src/config/firebase.config.ts to see it 
     * https://cli.angular.io/
 * Install git, or any git client that you are comfortable with
     * git https://git-scm.com/ 
-    * Gitkraken is an easy to use free dekstop client https://www.gitkraken.com/ 
+    * Gitkraken is an easy to use free desktop client https://www.gitkraken.com/ 
 * Clone our repository and checkout the connect-to-firebase branch for the starter code
 * You will want a good code editor, we recommend Visual Studio Code (free) or Webstorm (paid, has free trial)
     * https://code.visualstudio.com/
