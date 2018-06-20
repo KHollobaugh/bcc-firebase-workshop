@@ -21,7 +21,7 @@ Adding your firebase web config keys to src/config/firebase.config.ts to see it 
 * Install git, or any git client that you are comfortable with
     * git https://git-scm.com/ 
     * Gitkraken is an easy to use free desktop client https://www.gitkraken.com/ 
-* Clone our repository and checkout the connect-to-firebase branch for the starter code
+* Clone our repository for the starter code
 * You will want a good code editor, we recommend Visual Studio Code (free) or Webstorm (paid, has free trial)
     * https://code.visualstudio.com/
     * https://www.jetbrains.com/webstorm/
