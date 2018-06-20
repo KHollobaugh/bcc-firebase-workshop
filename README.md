@@ -11,7 +11,7 @@ Adding your firebase web config keys to src/config/firebase.config.ts to see it 
 
 # Development environment set up 
 ## Please do before coming to the workshop
-* Download Node, we recommend the LTS version 
+* Download Node, we recommend the LTS version (You will need at least version 8.9 to be compatible with the version of the Angular CLI we will be using)
     * https://nodejs.org/en/
 * Open a terminal window and verify that you have npm installed with `npm -v`
 * Install Firebase CLI latest version `npm install -g firebase-tools`
