@@ -1,4 +1,15 @@
 <div class="container">
+  <div class="row">
+    <div class="col s4"></div>
+    <div class="col s4">
+        <input id="views" type="number" [(ngModel)]="numberOfViewsFilter">
+        <label for="views">Min number of views</label>
+        <input id="name" type="text" [(ngModel)]="breweryNameFilter">
+        <label for="name">Brewery name</label>
+        <a class="waves-effect waves-light btn" (click)="filterBreweries()">FILTER BREWERIES</a>
+    </div>
+    <div class="col s4"></div>
+  </div>
   <div class="row" *ngFor="let brewery of breweryList">
     <div class="col s12">
       <div class="card">
