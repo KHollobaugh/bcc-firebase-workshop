@@ -9,8 +9,11 @@ import { Router } from '@angular/router';
 })
 export class BreweryListComponent implements OnInit {
   breweryListQueryRef;
+  unsubscribeFromRef;
   breweryList;
   db;
+  numberOfViewsFilter;
+  breweryNameFilter;
 
   constructor(private router: Router) { }
 
@@ -18,6 +21,20 @@ export class BreweryListComponent implements OnInit {
     // Get Firestore reference
 
     // Get breweries collection reference from Firestore, querying to sort by name and listen to changes
+  }
+
+  /**
+   * Set up listener
+   */
+  listenToRefSnapshot() {
+    // Unsubscribe to the current listener if it exists
+  }
+
+  /**
+   * Filter breweries by views, name or both!
+   */
+  filterBreweries() {
+
   }
 
   /**
