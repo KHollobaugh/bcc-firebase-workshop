@@ -1,38 +1,48 @@
 <div class="container">
-  <div class="row" *ngFor="let brewery of breweryList">
-    <div class="col s12">
-      <div class="card">
-        <div class="card-content">
-          <div class="row">
-              <span class="card-title col s10">{{ brewery.name }}</span><span class="card-title col s2">{{ brewery.averageRating }}/5</span>
-          </div>
-          <p>{{ brewery.description }}</p>
-          <div class="row">
-            <span class="col s10"></span><span class="col s2">views: {{ brewery.views ? brewery.views : 0 }}</span>
-          </div>
-        </div>
-        <div class="card-action">
-          <div class="row">
-            <div class="col s3">
-              <a class="waves-effect waves-light btn" [routerLink]="['/brewery', brewery.id]">VIEW</a>
+    <div class="row">
+      <div class="col s4"></div>
+      <div class="col s4">
+          <input id="views" type="number" [(ngModel)]="numberOfViewsFilter">
+          <label for="views">Min number of views</label>
+          <input id="name" type="text" [(ngModel)]="breweryNameFilter">
+          <label for="name">Brewery name</label>
+          <a class="waves-effect waves-light btn" (click)="filterBreweries()">FILTER BREWERIES</a>
+      </div>
+      <div class="col s4"></div>
+    </div>
+    <div class="row" *ngFor="let brewery of breweryList">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+            <div class="row">
+                <span class="card-title col s10">{{ brewery.name }}</span><span class="card-title col s2">{{ brewery.averageRating }}/5</span>
             </div>
-            <div class="col s3" *ngIf="getCurrentUid() === brewery.uid">
-              <a class="waves-effect waves-light btn" [routerLink]="['/edit-brewery', brewery.id]">EDIT</a>
+            <p>{{ brewery.description }}</p>
+            <div class="row">
+              <span class="col s10"></span><span class="col s2">views: {{ brewery.views ? brewery.views : 0 }}</span>
             </div>
-            <div class="col s3" *ngIf="getCurrentUid() === brewery.uid">
-              <a class="waves-effect waves-light btn" (click)="deleteBrewery(brewery.id)">DELETE</a>
+          </div>
+          <div class="card-action">
+            <div class="row">
+              <div class="col s3">
+                <a class="waves-effect waves-light btn" [routerLink]="['/brewery', brewery.id]">VIEW</a>
+              </div>
+              <div class="col s3" *ngIf="getCurrentUid() === brewery.uid">
+                <a class="waves-effect waves-light btn" [routerLink]="['/edit-brewery', brewery.id]">EDIT</a>
+              </div>
+              <div class="col s3" *ngIf="getCurrentUid() === brewery.uid">
+                <a class="waves-effect waves-light btn" (click)="deleteBrewery(brewery.id)">DELETE</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col s12">
-      <a class="btn-floating btn-large waves-effect waves-light" (click)="addBrewery()">
-        <i class="material-icons">add</i>
-      </a>
+    <div class="row">
+      <div class="col s12">
+        <a class="btn-floating btn-large waves-effect waves-light" (click)="addBrewery()">
+          <i class="material-icons">add</i>
+        </a>
+      </div>
     </div>
   </div>
-</div>
-
