@@ -9,8 +9,11 @@ import { Router } from '@angular/router';
 })
 export class BreweryListComponent implements OnInit {
   breweryListQueryRef;
+  unsubscribeFromRef;
   breweryList;
   db;
+  numberOfViewsFilter;
+  breweryNameFilter;
 
   constructor(private router: Router) { }
 
@@ -18,14 +21,45 @@ export class BreweryListComponent implements OnInit {
     // Get Firestore reference
     this.db = firebase.firestore();
     // Get breweries collection reference from Firestore, querying to sort by name and listen to changes
-    this.breweryListQueryRef = this.db.collection('breweries').orderBy('name');
-    this.breweryListQueryRef.onSnapshot((snapShot) => {
+    this.breweryListQueryRef = this.db.collection('breweries');
+    this.listenToRefSnapshot();
+  }
+
+  /**
+   * Set up listener
+   */
+  listenToRefSnapshot() {
+    // Unsubscribe to the current listener if it exists
+    if (this.unsubscribeFromRef) {
+      this.unsubscribeFromRef();
+    }
+
+    this.unsubscribeFromRef = this.breweryListQueryRef.onSnapshot((snapShot) => {
       this.breweryList = snapShot.docs.map((d) => {
         const data = d.data();
         const id = d.id;
         return { ...data, id: id };
       });
     });
+  }
+
+  /**
+   * Filter breweries by views, name or both!
+   */
+  filterBreweries() {
+    if (this.numberOfViewsFilter && this.breweryNameFilter) {
+      this.breweryListQueryRef = this.db.collection('breweries').where('views', '>=', this.numberOfViewsFilter)
+                                                         .where('name', '==', this.breweryNameFilter);
+    } else if (this.numberOfViewsFilter) {
+      this.breweryListQueryRef = this.db.collection('breweries').where('views', '>=', this.numberOfViewsFilter);
+    } else if (this.breweryNameFilter) {
+      this.breweryListQueryRef = this.db.collection('breweries').where('name', '==', this.breweryNameFilter);
+    }
+    this.breweryListQueryRef.get().then(a => {
+      console.log('We have the results from that filter once!');
+    });
+    // Or we can listen to changes that correspond to our query conditions
+    this.listenToRefSnapshot();
   }
 
   /**
