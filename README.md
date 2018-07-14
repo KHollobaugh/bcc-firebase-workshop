@@ -98,6 +98,8 @@ References
 * https://angularfirebase.com/lessons/advanced-firestore-nosql-data-structure-examples/
 
 Steps:
+* In the Firebase console, set up Firestore by clicking Database > Create Database > And select a mode
+  * For this app I would recomend just creating it in test mode so you do not have to wonder why Firestore is not letting you read/save     data later, but just remember that this will allow anyone with your API key and database endpoint to do whatever they want with         your data until we get rules set up in a little bit.
 * In src/app/list/brewery-list.component.ts 
   * Get references to Firestore and breweries collection
   * Listen to changes in the breweries collection and make the collection accessible to the component 
