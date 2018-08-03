@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const defaultImagePath = '../../assets/img/no-image.png';
 const admin = require('firebase-admin');
+const functions = require('firebase-functions');
 
  /**
   * Function responds to the first sign on event of a user through any method
