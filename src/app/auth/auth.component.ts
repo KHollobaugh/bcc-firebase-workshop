@@ -67,7 +67,6 @@ export class AuthComponent {
   signInWithPopup(provider) {
     firebase.auth().signInWithPopup(provider).then((result) => {
       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      const token = result.credential.accessToken;
       // The signed-in user info.
       const user = result.user;
     }).catch(function(error) {

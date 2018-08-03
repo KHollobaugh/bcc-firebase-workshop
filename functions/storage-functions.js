@@ -2,6 +2,7 @@ const vision = require('@google-cloud/vision');
 const exec = require('child-process-promise').exec;
 const gcs = require('@google-cloud/storage')();
 const admin = require('firebase-admin');
+const fs = require('fs');
 const visionClient = new vision.ImageAnnotatorClient();
 
 /**
@@ -18,12 +19,12 @@ module.exports.moderateUserProfileImage = function(object) {
 
     const userId = object.name.split('/')[1];
     console.log(userId);
-    const docRef = admin.firestore().collection('users').doc(userId);
-    return docRef.get().then(doc => {
+    const userDocRef = admin.firestore().collection('users').doc(userId);
+    return userDocRef.get().then(doc => {
         const user = doc.data();
         // The image has already been moderated.
         if (user.locked === true) {
-            console.log('already moderated!')
+            console.log('already moderated!');
             return;
         }
 
@@ -36,7 +37,7 @@ module.exports.moderateUserProfileImage = function(object) {
         const detections = results[0].safeSearchAnnotation;
         if (detections.adult || detections.violence) {
             console.log('The image', object.name, 'has been detected as inappropriate.');
-            return blurImage(object, docRef);
+            return blurImage(object, userDocRef);
         } else {
             console.log('The image', object.name, ' has been detected as OK.');
             return null;
@@ -48,13 +49,12 @@ module.exports.moderateUserProfileImage = function(object) {
  * Helper function to blur the given image located in the given bucket using ImageMagick
  * and lock the given user
  */
-function blurImage(object, userRef) {
+function blurImage(object, userDocRef) {
     const filePath = object.name;
     const bucket = gcs.bucket(object.bucket);
     const fileName = filePath.split('/').pop();
     const tempLocalFile = `/tmp/${fileName}`;
-    const userId = filePath.split('/')[1];
-      
+
     // Download file from bucket.
     return bucket.file(filePath).download({ destination: tempLocalFile }).then(() => {
         console.log('Image has been downloaded to', tempLocalFile);
@@ -69,10 +69,10 @@ function blurImage(object, userRef) {
     .then(() => {
         console.log('Blurred image has been uploaded to', filePath);
         // Indicate that the message has been moderated.
-        return userRef.update({ locked: true});
+        return userDocRef.update({ locked: true});
     })
     .then(() => {
         console.log('Marked the image as moderated in the database.');
-        return null;
+        return fs.unlinkSync(tempLocalFile);
     });
 }

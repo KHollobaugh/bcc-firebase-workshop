@@ -123,7 +123,7 @@ export class UserProfileComponent implements OnInit {
    * @param review
    */
   saveReview(review) {
-    this.userRef.collection('reviews').doc(review.id)
+    this.reviewsRef.doc(review.id)
       .update({ ...review });
   }
 
@@ -132,6 +132,6 @@ export class UserProfileComponent implements OnInit {
    * @param id
    */
   deleteReview(id) {
-    this.userRef.collection('reviews').doc(id).delete();
+    this.reviewsRef.doc(id).delete();
   }
 }
