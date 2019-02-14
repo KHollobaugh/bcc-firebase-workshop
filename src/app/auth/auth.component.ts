@@ -148,11 +148,6 @@ export class AuthComponent {
    * HINT You will need to obtain API credentials from Facebook for this.
    */
   signInWithFacebook() {
-    const provider =
-    new firebase.auth.FacebookAuthProvider();
-    provider.setCustomParameters({
-      'display': 'popup'
-    });
-    this.signInWithPopup(provider);
-  }
+
+}
 }
