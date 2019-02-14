@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
    * Set auth language
    */
   ngOnInit() {
-
+    firebase.auth().onAuthStateChanged(user => {
+      this.isAuthenticated = user != null;
+    });
   }
 }

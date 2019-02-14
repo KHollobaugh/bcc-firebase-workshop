@@ -14,13 +14,16 @@ export class HomeComponent implements OnInit {
    * Listen to Firebase auth state changes
    */
   ngOnInit() {
-
+    firebase.auth().onAuthStateChanged(user => {
+      this.isAuthenticated = user != null;
+      this.displayName = this.isAuthenticated ? user.displayName : '';
+    })
   }
 
   /**
    * Sign out of Firebase auth
    */
   signOut() {
-
+    firebase.auth().signOut();
   }
 }
